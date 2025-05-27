@@ -39,7 +39,7 @@ const Navigation = () => {
 							{" "}
 							<Link
 								target="_blank"
-								href={"https://github.com/yagazie-davidson"}
+								href={"https://github.com/Yagazie-davidson/retro-snap"}
 							>
 								{/* <Github /> */}
 								<svg
