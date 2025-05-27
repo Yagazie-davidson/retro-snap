@@ -1,1 +1,1 @@
-## Sticker Padi - Create and order Custom Stickers
+## RetroSnap - Turn your digital photos into retro-styled polaroid prints
