@@ -20,7 +20,7 @@ const Upload = () => {
 		const imageData = ctx.getImageData(0, 0, width, height);
 		const data = imageData.data;
 		for (let i = 0; i < data.length; i += 4) {
-			const noise = Math.random() * 20 - 15;
+			const noise = Math.random() * 5 - 0.5; // Adjust the grain intensity
 			data[i] += noise;
 			data[i + 1] += noise;
 			data[i + 2] += noise;
@@ -78,11 +78,14 @@ const Upload = () => {
 					ctx.fillStyle = "white";
 					ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-					ctx.filter = "blur(1px)";
-					ctx.drawImage(img, border, border, imgWidth, imgHeight);
-					ctx.filter = "none";
+					// ctx.filter = "blur(1px)";
+					// ctx.drawImage(img, border, border, imgWidth, imgHeight);
+					// ctx.filter = "none";
+					ctx.drawImage(img, border, border, imgWidth, imgHeight); // No blur
 
-					adjustBrightnessContrast(ctx, canvas.width, canvas.height, 10, 15);
+					// adjustBrightnessContrast(ctx, canvas.width, canvas.height, 10, 15);
+					adjustBrightnessContrast(ctx, canvas.width, canvas.height, 5, 10);
+
 					addGrain(ctx, canvas.width, canvas.height);
 				};
 				if (evt.target?.result) img.src = evt.target.result as string;
