@@ -1,62 +1,115 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { CloudUpload } from "lucide-react";
-import { useCartStore } from "@/store/cartStore"; // Import Zustand store
-import Image from "next/image";
-import { toast } from "sonner";
 
 const Upload = () => {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [selectedImage, setSelectedImage] = useState<File | null>(null);
-	const [imagePreview, setImagePreview] = useState<string | null>(null); // State for image preview
+	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [stickerSize, setStickerSize] = useState<string>("4x4");
-	const [quantity, setQuantity] = useState<number>(1);
-
-	const addToCart = useCartStore(state => state.addToCart); // Zustand action
 
 	const handleClick = () => {
 		fileInputRef.current?.click();
 	};
 
+	const addGrain = (
+		ctx: CanvasRenderingContext2D,
+		width: number,
+		height: number
+	) => {
+		const imageData = ctx.getImageData(0, 0, width, height);
+		const data = imageData.data;
+		for (let i = 0; i < data.length; i += 4) {
+			const noise = Math.random() * 20 - 15;
+			data[i] += noise;
+			data[i + 1] += noise;
+			data[i + 2] += noise;
+		}
+		ctx.putImageData(imageData, 0, 0);
+	};
+
+	const adjustBrightnessContrast = (
+		ctx: CanvasRenderingContext2D,
+		width: number,
+		height: number,
+		brightness: number,
+		contrast: number
+	) => {
+		const imageData = ctx.getImageData(0, 0, width, height);
+		const data = imageData.data;
+		const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+		for (let i = 0; i < data.length; i += 4) {
+			data[i] = factor * (data[i] - 128) + 128 + brightness;
+			data[i + 1] = factor * (data[i + 1] - 128) + 128 + brightness;
+			data[i + 2] = factor * (data[i + 2] - 128) + 128 + brightness;
+		}
+		ctx.putImageData(imageData, 0, 0);
+	};
+
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (file && file.type.startsWith("image/")) {
-			setSelectedImage(file);
-			setImagePreview(URL.createObjectURL(file)); // Generate preview URL
-			console.log("Selected image:", file);
+			setImagePreview(URL.createObjectURL(file));
+
+			const reader = new FileReader();
+			reader.onload = function (evt) {
+				const img = new window.Image() as HTMLImageElement;
+				img.onload = function () {
+					const maxWidth = 300;
+					const maxHeight = 300;
+					const border = 10;
+					const bottomExtra = 40;
+
+					let imgWidth = img.width;
+					let imgHeight = img.height;
+					const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
+					imgWidth *= ratio;
+					imgHeight *= ratio;
+
+					const canvas = canvasRef.current;
+					if (!canvas) return;
+
+					canvas.width = imgWidth + border * 2;
+					canvas.height = imgHeight + border + bottomExtra;
+
+					const ctx = canvas.getContext("2d");
+					if (!ctx) return;
+
+					ctx.fillStyle = "white";
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+					ctx.filter = "blur(1px)";
+					ctx.drawImage(img, border, border, imgWidth, imgHeight);
+					ctx.filter = "none";
+
+					adjustBrightnessContrast(ctx, canvas.width, canvas.height, 10, 15);
+					addGrain(ctx, canvas.width, canvas.height);
+				};
+				if (evt.target?.result) img.src = evt.target.result as string;
+			};
+			reader.readAsDataURL(file);
 		}
 	};
 
-	const handleAddToCart = () => {
-		if (selectedImage) {
-			addToCart({
-				image: selectedImage,
-				size: stickerSize,
-				quantity,
-			});
-			toast("Sticker added to cart successfully!");
-		} else {
-			toast("Please upload an image first.");
-		}
+	const handleDownload = () => {
+		const canvas = canvasRef.current;
+		if (!canvas) return;
+		const link = document.createElement("a");
+		link.download = "polaroid-photo.png";
+		link.href = canvas.toDataURL("image/png");
+		link.click();
 	};
 
 	return (
 		<div className="cursor-pointer md:ml-5 flex flex-col items-center justify-center">
-			<div
-				onClick={handleClick}
-				className="flex flex-col justify-center items-center space-y-3 md:space-y-6 h-[180px] border border-dashed bg-white border-gray-300 rounded-lg p-4 w-full"
-			>
-				{/* Show image preview if available, otherwise show CloudUpload icon */}
+			<div className="flex flex-col justify-center items-center space-y-3 md:space-y-6 h-[280px] border border-dashed bg-white border-gray-300 rounded-lg p-4 w-full">
 				{imagePreview ? (
-					<Image
-						src={imagePreview}
-						alt="Preview"
-						className="h-full w-full object-contain rounded-lg"
-						width={100}
-						height={100}
-					/>
+					<canvas ref={canvasRef} />
 				) : (
-					<>
+					<div
+						onClick={handleClick}
+						className="flex flex-col items-center justify-center"
+					>
 						<CloudUpload size={75} />
 						<h2 className="text-[1rem] md:text-[1.5rem] font-normal">
 							Drag & Drop Browse to Upload
@@ -64,7 +117,7 @@ const Upload = () => {
 						<h2 className="text-[14px] mt-5">
 							Supported files (png, jpeg, jpg)
 						</h2>
-					</>
+					</div>
 				)}
 			</div>
 			<input
@@ -74,9 +127,7 @@ const Upload = () => {
 				accept="image/*"
 				className="hidden"
 			/>
-
-			{/* Sticker Size and Quantity Inputs */}
-			<div className="flex space-x-4 mt-4 w-full">
+			{/* <div className="flex space-x-4 mt-4 w-full">
 				<div className="w-full">
 					<label className="font-semibold">Choose size</label>
 					<select
@@ -89,25 +140,12 @@ const Upload = () => {
 						<option value="5x5">5"x5"</option>
 					</select>
 				</div>
-				<div className="w-full">
-					<label className="font-semibold">Quantity</label>
-					<input
-						type="number"
-						value={quantity}
-						onChange={e => setQuantity(Number(e.target.value))}
-						min={1}
-						className="border border-gray-300 rounded-[5px] p-2 w-full bg-white"
-						placeholder="Quantity"
-					/>
-				</div>
-			</div>
-
-			{/* Add to Cart Button */}
+			</div> */}
 			<button
-				onClick={handleAddToCart}
+				onClick={handleDownload}
 				className="bg-black cursor-pointer w-full text-white px-5 py-3 rounded-[5px] mt-4 transition duration-300 hover:bg-gray-800 hover:text-white"
 			>
-				Add to Cart
+				Download
 			</button>
 		</div>
 	);

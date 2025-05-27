@@ -10,12 +10,12 @@ const Footer = () => {
 			</ul>
 			<div>
 				<h2 className="text-[3rem] md:text-[8rem] text-center font-semibold">
-					STICKER PADI
+					RetroSnap
 				</h2>
 			</div>
 			{/* Copyright Notice */}
 			<p className="text-center text-sm mt-4">
-				&copy; {new Date().getFullYear()} Sticker Padi. All rights reserved.
+				&copy; {new Date().getFullYear()} RetroSnap. All rights reserved.
 			</p>
 		</div>
 	);
