@@ -1,0 +1,172 @@
+"use client";
+import Navigation from "@/components/Navigation";
+import Upload from "@/features/upload/Upload";
+import { useRef } from "react";
+import { motion } from "motion/react";
+
+export default function Home() {
+	const uploadSectionRef = useRef<HTMLDivElement>(null);
+
+	const handleScrollToUpload = () => {
+		uploadSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+	};
+
+	return (
+		<div className="relative w-full">
+			<div className="absolute w-full top-10">
+				<div className="flex w-full">
+					<div className="bg-white w-full mx-10 md:mx-28 rounded-3xl">
+						<Navigation />
+					</div>
+				</div>
+			</div>
+			<div className="">
+				<div
+					className="flex flex-col items-center justify-center h-screen space-y-7 "
+					style={{
+						backgroundImage: "url('/hero-bg.svg')",
+						backgroundSize: "cover, contain",
+						backgroundPosition: "center, top",
+						backgroundRepeat: "no-repeat, no-repeat",
+					}}
+				>
+					<div className="relative w-full">
+						<div>
+							<motion.div
+								initial={{ opacity: 0, x: 200 }}
+								whileInView={{ opacity: 1, x: 0 }}
+								viewport={{ once: true }}
+								transition={{
+									duration: 0.2,
+									delay: 0.4,
+									// ease: "easeOut",
+								}}
+								className="absolute top-0 right-4 md:right-36"
+							>
+								<p className="bg-[#FDE293] text-[#FAB32A] font-semibold px-3 py-0.5 rounded-2xl text-[0.9rem]">
+									Cutom Stickers
+								</p>
+							</motion.div>
+							<motion.div
+								initial={{ opacity: 0, x: -300 }}
+								animate={{ opacity: 1, x: 0 }}
+								viewport={{ once: true }}
+								transition={{
+									duration: 0.2,
+									delay: 0.3,
+									// ease: "easeOut",
+								}}
+								className="absolute top-0 left-3 md:left-64"
+							>
+								<p className="bg-[#F8D8D8] text-[#EA4235] font-semibold px-3 py-0.5 rounded-2xl text-[0.9rem]">
+									Upload
+								</p>
+							</motion.div>
+							<motion.div
+								initial={{ opacity: 0, x: 200 }}
+								whileInView={{ opacity: 1, x: 0 }}
+								viewport={{ once: true }}
+								transition={{
+									duration: 0.2,
+									delay: 0.1,
+									// ease: "easeOut",
+								}}
+								className="absolute -bottom-96 md:-bottom-72 right-3 md:right-36"
+							>
+								<p className="bg-[#F1FAD5] text-[#33A854] font-semibold px-3 py-0.5 rounded-2xl text-[0.9rem]">
+									We deliver
+								</p>
+							</motion.div>
+							<motion.div
+								initial={{ opacity: 0, x: -200 }}
+								animate={{ opacity: 1, x: 0 }}
+								viewport={{ once: true }}
+								transition={{
+									duration: 0.2,
+									delay: 0.15,
+									// ease: "easeOut",
+								}}
+								className="absolute -bottom-96 left-2 md:left-36"
+							>
+								<p className="bg-[#C1E9F3] text-[#4081ED] font-semibold px-3 py-0.5 rounded-2xl text-[0.9rem]">
+									Sticker padi
+								</p>
+							</motion.div>
+						</div>
+					</div>
+					<motion.h1
+						viewport={{ once: true }}
+						initial={{ y: 50, opacity: 0 }} // Start from below with opacity 0
+						whileInView={{ y: 0, opacity: 1 }} // Move to its original position with opacity 1
+						transition={{ duration: 0.8, ease: "easeOut" }} // Smooth easing and longer duration
+						className="text-[2.3rem] px-[50px] md:text-[5rem] font-bold text-center md:px-[200px]"
+					>
+						Turn Your Designs Into Premium Die-Cut Stickers.
+					</motion.h1>
+					<p className="text-[1.07rem] ">
+						Upload. Customize. Print. Delivered.
+					</p>
+					<motion.button
+						initial={{ opacity: 0, scale: 0 }}
+						whileInView={{ opacity: 1, scale: 1 }}
+						viewport={{ once: true }}
+						transition={{
+							duration: 0.1,
+							ease: "easeOut",
+						}}
+						onClick={handleScrollToUpload}
+						className="bg-black cursor-pointer font-semibold text-white px-5 py-3 rounded-[8px] transition duration-300 hover:bg-white hover:text-black hover:border hover:border-black"
+					>
+						{/* Domino Animation for Each Word */}
+						{["Upload", "your", "Design"].map((word, index) => (
+							<motion.span
+								viewport={{ once: true }}
+								key={index}
+								initial={{ y: 50, opacity: 0 }}
+								whileInView={{ y: 0, opacity: 1 }}
+								transition={{
+									delay: index * 0.2, // Delay each word by 0.2s
+									duration: 0.8,
+									ease: "easeOut",
+								}}
+								className="inline-block mr-2" // Add spacing between words
+							>
+								{word}
+							</motion.span>
+						))}
+					</motion.button>
+					<div className="flex flex-col font-light md:flex-row justify-center items-center md:space-x-5 mt-5">
+						<div>Precision Die-cutting</div>
+						<div>Fast Delivery</div>
+						<div>High-Quality Printing</div>
+					</div>
+				</div>
+				<div
+					id="upload"
+					ref={uploadSectionRef}
+					className="flex  flex-col pb-20 md:flex-row space-y-10 md:space-y-0 md:items-start md:justify-between md:px-20 px-10 pt-10"
+					style={{
+						backgroundImage: "url('/bg2.png'), url('/hero-bg.svg')",
+						backgroundSize: "cover, contain",
+						backgroundPosition: "center, top",
+						backgroundRepeat: "no-repeat, no-repeat",
+					}}
+				>
+					<div className="w-full">
+						<h2 className="text-[1.5rem] md:text-[2.5rem] font-semibold">
+							How It Works
+						</h2>
+						<ol className="list-decimal list-inside text-[0.9rem] md:text-[1.2rem] space-y-4 md:space-y-6 mt-5">
+							<li className="">Upload your design (PNG. JPG)</li>
+							<li>Choose size and quantity</li>
+							<li>We print and ship</li>
+						</ol>
+					</div>
+					<div className=" w-full">
+						<Upload />
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
