@@ -60,7 +60,7 @@ export default function Home() {
 									delay: 0.3,
 									// ease: "easeOut",
 								}}
-								className="absolute top-0 left-3 md:left-64"
+								className="absolute z-40 -top-10 md:top-0  left-20 md:left-64"
 							>
 								<p className="bg-[#F8D8D8] text-[#EA4235] font-semibold px-3 py-0.5 rounded-2xl text-[0.9rem]">
 									Nostalgic
@@ -75,7 +75,7 @@ export default function Home() {
 									delay: 0.1,
 									// ease: "easeOut",
 								}}
-								className="absolute -bottom-96 md:-bottom-72 right-3 md:right-36"
+								className="absolute z-40 -bottom-96 md:-bottom-72 right-3 md:right-36"
 							>
 								<p className="bg-[#F1FAD5] text-[#33A854] font-semibold px-3 py-0.5 rounded-2xl text-[0.9rem]">
 									Creative
@@ -89,7 +89,7 @@ export default function Home() {
 									delay: 0.3,
 									// ease: "easeOut",
 								}}
-								className="absolute top-0 md:top-0 left-3 md:left-0"
+								className="absolute -top-30 md:top-0 -left-10 md:left-0"
 							>
 								<Image
 									src={"/pola.png"}
@@ -107,13 +107,31 @@ export default function Home() {
 									delay: 0.1,
 									// ease: "easeOut",
 								}}
-								className="absolute -bottom-96 md:-bottom-[42rem] right-3 md:right-0"
+								className="absolute -bottom-[42rem] md:-bottom-[42rem] right-0 md:right-0"
 							>
 								<Image
 									src={"/pola.png"}
 									alt="iimage"
 									width={200}
 									height={200}
+								/>
+							</motion.div>
+							<motion.div
+								initial={{ opacity: 0, y: 50 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true }}
+								transition={{
+									duration: 0.3,
+									delay: 0.3,
+									// ease: "easeOut",
+								}}
+								className="absolute -bottom-[20rem] md:-bottom-[32rem] left-0 md:left-72"
+							>
+								<Image
+									src={"/camera.png"}
+									alt="iimage"
+									width={30}
+									height={30}
 								/>
 							</motion.div>
 							<motion.div
@@ -138,7 +156,7 @@ export default function Home() {
 						initial={{ y: 50, opacity: 0 }} // Start from below with opacity 0
 						whileInView={{ y: 0, opacity: 1 }} // Move to its original position with opacity 1
 						transition={{ duration: 0.8, ease: "easeOut" }} // Smooth easing and longer duration
-						className="text-[2.3rem] px-[50px] md:text-[5rem] font-bold text-center md:px-[200px]"
+						className="text-[2.3rem] z-50 px-[50px] md:text-[5rem] font-bold text-center md:px-[200px]"
 					>
 						Bring Back the Magic of Polaroids
 					</motion.h1>
