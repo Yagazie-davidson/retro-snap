@@ -4,6 +4,7 @@ import Upload from "@/features/upload/Upload";
 import { useRef } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 export default function Home() {
 	const uploadSectionRef = useRef<HTMLDivElement>(null);
@@ -179,10 +180,10 @@ export default function Home() {
 							ease: "easeOut",
 						}}
 						onClick={handleScrollToUpload}
-						className="bg-black cursor-pointer font-semibold text-white px-5 py-3 rounded-[8px] transition duration-300 hover:bg-white hover:text-black hover:border hover:border-black"
+						className="bg-black cursor-pointer flex items-center font-semibold text-white px-5 py-3 rounded-[8px] transition duration-300 hover:bg-white hover:text-black hover:border hover:border-black"
 					>
 						{/* Domino Animation for Each Word */}
-						{["Convert", "Your", "First", "Photo", "→"].map((word, index) => (
+						{["Convert", "Your", "First", "Photo"].map((word, index) => (
 							<motion.span
 								viewport={{ once: true }}
 								key={index}
@@ -198,6 +199,19 @@ export default function Home() {
 								{word}
 							</motion.span>
 						))}
+						<motion.div
+							viewport={{ once: true }}
+							initial={{ y: 50, opacity: 0 }}
+							whileInView={{ y: 0, opacity: 1 }}
+							transition={{
+								delay: 0.8, // Delay each word by 0.2s
+								duration: 0.5,
+								ease: "easeOut",
+							}}
+							className="animate-bounce"
+						>
+							<ChevronDown />
+						</motion.div>
 					</motion.button>
 					{/* <div className="flex flex-col font-light md:flex-row justify-center items-center md:space-x-5 mt-5">
 						<div>Precision Die-cutting</div>
